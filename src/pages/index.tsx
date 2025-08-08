@@ -1,4 +1,3 @@
-// src/pages/index.tsx: Main dashboard page
 import { Box, Heading, Text, Button, VStack } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useStore } from '../store/useStore';
@@ -15,21 +14,19 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       if (!user) return;
-      setLoading(true);
 
+      setLoading(true);
       try {
-        // Fetch account balances
-        const {  accounts, error: accountError } = await supabase
+        const { data: accounts, error: accountsError } = await supabase
           .from('accounts')
           .select('balance')
           .eq('family_id', user.family_id);
 
-        if (accountError) throw accountError;
+        if (accountsError) throw accountsError;
         const total = accounts?.reduce((sum, acc) => sum + (acc.balance || 0), 0) || 0;
         setBalance(total);
 
-        // Fetch recent transactions
-        const {  txs, error: txError } = await supabase
+        const { data: txs, error: txError } = await supabase
           .from('transactions')
           .select('*')
           .eq('family_id', user.family_id)
@@ -37,10 +34,9 @@ export default function Dashboard() {
           .limit(5);
 
         if (txError) throw txError;
-
         setRecentTx(txs || []);
       } catch (err) {
-        console.error('Error loading dashboard:', err);
+        console.error('Error fetching ', err);
       } finally {
         setLoading(false);
       }
@@ -49,9 +45,7 @@ export default function Dashboard() {
     fetchData();
   }, [user]);
 
-  if (!user) {
-    return <Text fontSize="xl">Please log in to access the dashboard.</Text>;
-  }
+  if (!user) return <Text fontSize="xl">Please log in to view the dashboard.</Text>;
 
   return (
     <VStack spacing={6} p={4} align="stretch">
@@ -62,19 +56,12 @@ export default function Dashboard() {
       ) : (
         <>
           <Box p={4} bg="gray.50" rounded="md" shadow="sm">
-            <Text fontSize="lg" fontWeight="bold">
-              Total Balance:
-            </Text>
-            <Text fontSize="2xl" color="green.500">
-              {formatCurrency(balance, 'USD')}
-            </Text>
+            <Text fontSize="lg" fontWeight="bold">Total Balance:</Text>
+            <Text fontSize="2xl" color="teal.500">{formatCurrency(balance, 'USD')}</Text>
           </Box>
 
-          <Button colorScheme="blue" alignSelf="flex-start">
-            Add Transaction
-          </Button>
+          <Button colorScheme="blue">Add Transaction</Button>
 
-          {/* Recent Transactions Table */}
           <TransactionTable transactions={recentTx} />
         </>
       )}
