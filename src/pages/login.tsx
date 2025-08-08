@@ -41,12 +41,14 @@ export default function Login() {
         <FormLabel>Password</FormLabel>
         <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
       </FormControl>
-      <Button colorScheme="primary" onClick={handleAuth}>
+      <Button colorScheme="blue" onClick={handleAuth}>
         {isRegister ? 'Register' : 'Login'}
       </Button>
       <Button variant="link" onClick={() => setIsRegister(!isRegister)}>
         {isRegister ? 'Switch to Login' : 'Switch to Register'}
       </Button>
+
+
     </VStack>
   );
 }

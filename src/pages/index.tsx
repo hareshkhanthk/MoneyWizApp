@@ -14,19 +14,18 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       if (!user) return;
-
       setLoading(true);
       try {
-        const { data: accounts, error: accountsError } = await supabase
+        const {  accounts, error: accountError } = await supabase
           .from('accounts')
           .select('balance')
           .eq('family_id', user.family_id);
 
-        if (accountsError) throw accountsError;
-        const total = accounts?.reduce((sum, acc) => sum + (acc.balance || 0), 0) || 0;
+        if (accountError) throw accountError;
+        const total = accounts?.reduce((sum, acc) => sum + (Number(acc.balance) || 0), 0) || 0;
         setBalance(total);
 
-        const { data: txs, error: txError } = await supabase
+        const {  txs, error: txError } = await supabase
           .from('transactions')
           .select('*')
           .eq('family_id', user.family_id)
@@ -36,7 +35,7 @@ export default function Dashboard() {
         if (txError) throw txError;
         setRecentTx(txs || []);
       } catch (err) {
-        console.error('Error fetching ', err);
+        console.error('Dashboard load error:', err);
       } finally {
         setLoading(false);
       }
@@ -45,23 +44,22 @@ export default function Dashboard() {
     fetchData();
   }, [user]);
 
-  if (!user) return <Text fontSize="xl">Please log in to view the dashboard.</Text>;
+  if (!user) {
+    return <Text fontSize="xl">Please log in to access the dashboard.</Text>;
+  }
 
   return (
     <VStack spacing={6} p={4} align="stretch">
       <Heading>Dashboard</Heading>
-
       {loading ? (
         <Text>Loading...</Text>
       ) : (
         <>
           <Box p={4} bg="gray.50" rounded="md" shadow="sm">
             <Text fontSize="lg" fontWeight="bold">Total Balance:</Text>
-            <Text fontSize="2xl" color="teal.500">{formatCurrency(balance, 'USD')}</Text>
+            <Text fontSize="2xl" color="teal.600">{formatCurrency(balance, 'USD')}</Text>
           </Box>
-
           <Button colorScheme="blue">Add Transaction</Button>
-
           <TransactionTable transactions={recentTx} />
         </>
       )}

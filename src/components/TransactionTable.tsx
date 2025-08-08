@@ -2,7 +2,7 @@ import { Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 
 export default function TransactionTable({ transactions }: { transactions: any[] }) {
   return (
-    <Table variant="striped" colorScheme="gray">
+    <Table variant="striped" size="sm">
       <Thead>
         <Tr>
           <Th>Date</Th>
@@ -12,7 +12,7 @@ export default function TransactionTable({ transactions }: { transactions: any[]
         </Tr>
       </Thead>
       <Tbody>
-        {transactions.map((tx) => (
+        {transactions.map(tx => (
           <Tr key={tx.id}>
             <Td>{tx.date}</Td>
             <Td>{tx.description}</Td>

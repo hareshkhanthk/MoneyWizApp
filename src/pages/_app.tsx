@@ -1,44 +1,52 @@
+// src/pages/_app.tsx
 import type { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
 import { useEffect } from 'react';
-import { useStore } from '../store/useStore';
-import supabase from '../utils/supabaseClient';
 import theme from '../theme';
+import supabase from '../utils/supabaseClient';
+import { useStore } from '../store/useStore';
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const { setUser } = useStore();
 
   useEffect(() => {
+    // Get initial session
     const syncUser = async () => {
       const {
-         { session },
+        data: { session },
       } = await supabase.auth.getSession();
 
       if (session?.user) {
         setUser({
           id: session.user.id,
-          email: session.user.email,
-          family_id: session.user.user_metadata?.family_id || 'default',
+          email: session.user.email || '',
+          family_id: session.user.user_metadata?.family_id || 'demo123',
         });
+      } else {
+        setUser(null);
       }
     };
 
     syncUser();
 
-    const {  listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) {
-        setUser({
-          id: session.user.id,
-          email: session.user.email,
-          family_id: session.user.user_metadata?.family_id || 'default',
-        });
-      } else {
-        setUser(null);
+    // Set up real-time session listener
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        if (session?.user) {
+          setUser({
+            id: session.user.id,
+            email: session.user.email || '',
+            family_id: session.user.user_metadata?.family_id || 'demo123',
+          });
+        } else {
+          setUser(null);
+        }
       }
-    });
+    );
 
     return () => {
-      listener?.subscription?.unsubscribe();
+      // Cleanup auth listener
+      listener?.subscription?.unsubscribe?.();
     };
   }, [setUser]);
 
