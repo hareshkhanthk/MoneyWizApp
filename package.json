@@ -1,0 +1,33 @@
+{
+  "name": "moneywiz-finance-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@chakra-ui/icons": "^2.2.4",
+    "@chakra-ui/react": "^2.10.9",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@supabase/supabase-js": "^2.39.4",
+    "csv-parse": "^5.6.0",
+    "csv-stringify": "^6.6.0",
+    "framer-motion": "^12.23.12",
+    "next": "^14.2.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "recharts": "^2.7.2",
+    "zustand": "^4.5.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/react": "^18.2.25",
+    "eslint": "8.52.0",
+    "eslint-config-next": "14.2.0",
+    "typescript": "^5.1.6"
+  }
+}

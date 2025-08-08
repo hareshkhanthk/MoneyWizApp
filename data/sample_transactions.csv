@@ -1,0 +1,6 @@
+date,account,amount,currency,category,type,description,tags,receipt_url
+2024-08-01,Main Checking,-50,USD,Groceries,expense,Walmart,"grocery,food",
+2024-08-03,Credit Card,-20,USD,Subscriptions,expense,Netflix,"entertainment,streaming",
+2024-08-05,Main Checking,2000,USD,Salary,income,August Salary,"payroll,work",
+2024-08-08,Cash,-15,USD,Transport,expense,Taxis,"taxi",
+2024-08-09,Main Checking,-100,USD,Utilities,expense,Electric Bill,"utilities,power",
